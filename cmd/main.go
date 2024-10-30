@@ -4,10 +4,11 @@ import (
 	"database/sql"
 	"log"
 
+	"github.com/go-sql-driver/mysql"
+
 	"github.com/dtg-lucifer/go-backend/cmd/api"
 	"github.com/dtg-lucifer/go-backend/config"
 	"github.com/dtg-lucifer/go-backend/db"
-	"github.com/go-sql-driver/mysql"
 )
 
 func main() {
