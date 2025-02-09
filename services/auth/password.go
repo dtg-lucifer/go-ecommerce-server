@@ -10,3 +10,8 @@ func HashPassword(p string) (string, error) {
 
 	return string(hash), nil
 }
+
+func ComparePassword(hashed string, p []byte) bool {
+  err := bcrypt.CompareHashAndPassword([]byte(hashed), p)
+  return err == nil
+}
