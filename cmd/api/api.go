@@ -5,31 +5,36 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/dtg-lucifer/go-backend/services/product"
 	"github.com/dtg-lucifer/go-backend/services/users"
 	"github.com/gorilla/mux"
 )
 
 type APIServer struct {
-  addr string
-  db *sql.DB
+	addr string
+	db   *sql.DB
 }
 
 func NewApiServer(addr string, db *sql.DB) *APIServer {
-  return &APIServer{
-    addr: addr,
-    db: db,
-  }
+	return &APIServer{
+		addr: addr,
+		db:   db,
+	}
 }
 
 func (s *APIServer) Run() error {
-  router := mux.NewRouter()
-  subrouter := router.PathPrefix("/api/v1").Subrouter()
+	router := mux.NewRouter()
+	subrouter := router.PathPrefix("/api/v1").Subrouter()
 
-  store := users.NewStore(s.db)
-  userHandler := users.NewHandler(store)
-  userHandler.RegisterRoutes(subrouter)
+	userStore := users.NewStore(s.db)
+	userHandler := users.NewHandler(userStore)
+	userHandler.RegisterRoutes(subrouter)
 
-  log.Println("Listening on", s.addr) 
+  productStore := product.NewStore(s.db)
+  productHandler := product.NewHandler(productStore, userStore)
+  productHandler.RegisterRoutes(subrouter)
 
-  return http.ListenAndServe(s.addr, router)  
+	log.Println("Listening on", s.addr)
+
+	return http.ListenAndServe(s.addr, router)
 }
