@@ -21,3 +21,6 @@ migrate-down:
 
 seed:
 	@go run db/seed/seed.go
+
+format:
+	@go fmt ./...
